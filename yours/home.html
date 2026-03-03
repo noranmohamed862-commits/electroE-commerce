@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ElectroSky | Ultimate Tech Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: { extend: { colors: { brand: "#3b82f6", darkBg: "#0f172a", cardDark: "#1e293b" }, fontFamily: { sans: ["Poppins", "sans-serif"] } } },
+      };
+    </script>
+    <style>
+      body { font-family: "Poppins", sans-serif; }
+      .drawer { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+      .glass { background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); }
+      .dark .glass { background: rgba(15,23,42,0.8); }
+      .swiper-pagination-bullet-active { width: 30px !important; border-radius: 10px !important; background: #3b82f6 !important; }
+      .color-dot.active { border: 3px solid #3b82f6; transform: scale(1.2); }
+      .spec-btn.active { background: #3b82f6; color: white; border-color: #3b82f6; }
+      .thumb-img { transition: all 0.3s ease; border: 2px solid transparent; }
+      .thumb-img:hover { border-color: #3b82f6; transform: translateY(-3px); }
+      .hero-text { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+      .swiper-slide-active .hero-text { opacity: 1; transform: translateY(0); }
+      .nav-link { position: relative; transition: all 0.3s ease; }
+      .nav-link::after { content: ""; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: #3b82f6; transition: width 0.3s ease; }
+      .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+      .nav-link:hover { color: #3b82f6; }
+      .mobile-menu { transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); }
+      .mobile-menu.open { transform: translateX(0); }
+      .countdown-box { animation: pulse-glow 2s infinite; }
+      @keyframes pulse-glow { 0%,100% { box-shadow: 0 0 20px rgba(59,130,246,0.3); } 50% { box-shadow: 0 0 40px rgba(59,130,246,0.6); } }
+      .sale-badge { animation: bounce-glow 2s ease-in-out infinite; }
+      @keyframes bounce-glow { 0%,100% { transform: scale(1); box-shadow: 0 0 15px rgba(239,68,68,0.5); } 50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(239,68,68,0.8); } }
+      .filter-btn { transition: all 0.3s ease; }
+      .filter-btn.active { background: #3b82f6 !important; color: white !important; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(59,130,246,0.4); }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-slate-800 dark:bg-darkBg dark:text-white transition-colors duration-300 overflow-x-hidden">
+
+    <!-- NAVBAR -->
+    <nav class="glass fixed w-full z-[100] top-0 border-b dark:border-slate-800">
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
+          <a href="#" class="text-2xl font-black text-brand uppercase tracking-tighter flex items-center gap-2">
+            <i class="fa-solid fa-bolt text-yellow-400 animate-pulse"></i> ElectroSky
+          </a>
+          <div class="hidden lg:flex items-center gap-8">
+            <a href="#home" class="nav-link active font-semibold text-sm uppercase tracking-wider"><i class="fa-solid fa-house mr-2"></i>Home</a>
+            <a href="#products" class="nav-link font-semibold text-sm uppercase tracking-wider"><i class="fa-solid fa-laptop mr-2"></i>Products</a>
+            <a href="#sales" class="nav-link font-semibold text-sm uppercase tracking-wider"><i class="fa-solid fa-tags mr-2"></i>Sales</a>
+            <a href="#about" class="nav-link font-semibold text-sm uppercase tracking-wider"><i class="fa-solid fa-circle-info mr-2"></i>About Us</a>
+            <a href="#contact" class="nav-link font-semibold text-sm uppercase tracking-wider"><i class="fa-solid fa-envelope mr-2"></i>Contact</a>
+          </div>
+          <div class="flex items-center gap-4">
+            <button onclick="toggleSearch()" class="hidden md:flex w-10 h-10 rounded-xl bg-gray-100 dark:bg-slate-800 items-center justify-center hover:text-brand transition"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button id="theme-btn" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center hover:text-brand transition">
+              <i class="fa-solid fa-moon dark:hidden"></i>
+              <i class="fa-solid fa-sun hidden dark:block text-yellow-400"></i>
+            </button>
+            <div class="relative cursor-pointer group" onclick="toggleDrawer('wishlist-sidebar')">
+              <i class="fa-regular fa-heart text-2xl group-hover:text-red-500 transition"></i>
+              <span id="fav-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900">0</span>
+            </div>
+            <div class="relative cursor-pointer group" onclick="toggleDrawer('cart-sidebar')">
+              <i class="fa-solid fa-cart-shopping text-2xl group-hover:text-brand transition"></i>
+              <span id="cart-count-badge" class="absolute -top-2 -right-2 bg-brand text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900">0</span>
+            </div>
+            <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="lg:hidden w-10 h-10 rounded-xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center hover:text-brand transition">
+              <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu" class="mobile-menu fixed top-0 left-0 h-full w-[280px] bg-white dark:bg-slate-900 z-[150] shadow-2xl">
+      <div class="p-6 border-b dark:border-slate-800 flex justify-between items-center">
+        <span class="text-xl font-black text-brand uppercase">Menu</span>
+        <button onclick="toggleMobileMenu()" class="text-3xl hover:text-red-500">&times;</button>
+      </div>
+      <div class="p-6 space-y-4">
+        <a href="#home" onclick="toggleMobileMenu()" class="flex items-center gap-4 p-4 rounded-2xl hover:bg-gray-100 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-house text-brand text-xl w-8"></i><span class="font-semibold">Home</span></a>
+        <a href="#products" onclick="toggleMobileMenu()" class="flex items-center gap-4 p-4 rounded-2xl hover:bg-gray-100 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-laptop text-brand text-xl w-8"></i><span class="font-semibold">Products</span></a>
+        <a href="#sales" onclick="toggleMobileMenu()" class="flex items-center gap-4 p-4 rounded-2xl hover:bg-gray-100 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-tags text-brand text-xl w-8"></i><span class="font-semibold">Sales</span></a>
+        <a href="#about" onclick="toggleMobileMenu()" class="flex items-center gap-4 p-4 rounded-2xl hover:bg-gray-100 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-circle-info text-brand text-xl w-8"></i><span class="font-semibold">About Us</span></a>
+        <a href="#contact" onclick="toggleMobileMenu()" class="flex items-center gap-4 p-4 rounded-2xl hover:bg-gray-100 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-envelope text-brand text-xl w-8"></i><span class="font-semibold">Contact</span></a>
+      </div>
+      <div class="absolute bottom-0 left-0 right-0 p-6 border-t dark:border-slate-800">
+        <p class="text-xs text-gray-500 mb-4 uppercase tracking-wider">Follow Us</p>
+        <div class="flex gap-4">
+          <a href="#" class="w-10 h-10 bg-gray-100 dark:bg-slate-800 rounded-xl flex items-center justify-center hover:bg-brand hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="w-10 h-10 bg-gray-100 dark:bg-slate-800 rounded-xl flex items-center justify-center hover:bg-brand hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="w-10 h-10 bg-gray-100 dark:bg-slate-800 rounded-xl flex items-center justify-center hover:bg-brand hover:text-white transition"><i class="fa-brands fa-twitter"></i></a>
+        </div>
+      </div>
+    </div>
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/60 z-[140] hidden backdrop-blur-sm" onclick="toggleMobileMenu()"></div>
+
+    <!-- SEARCH MODAL -->
+    <div id="search-modal" class="fixed inset-0 bg-black/80 z-[200] hidden backdrop-blur-md flex items-start justify-center pt-32">
+      <div class="w-full max-w-2xl mx-4 bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-2xl transform scale-95 opacity-0 transition-all duration-300" id="search-box">
+        <div class="flex items-center gap-4 border-b dark:border-slate-700 pb-4">
+          <i class="fa-solid fa-magnifying-glass text-2xl text-brand"></i>
+          <input type="text" id="search-input" placeholder="Search for products..." class="flex-1 bg-transparent text-xl outline-none" autofocus />
+          <button onclick="toggleSearch()" class="text-3xl hover:text-red-500">&times;</button>
+        </div>
+        <div id="search-results" class="mt-4 max-h-[400px] overflow-y-auto">
+          <p class="text-gray-500 text-center py-8">Type to search...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- OVERLAY -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-[110] hidden backdrop-blur-sm" onclick="closeAllDrawers()"></div>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full max-w-[400px] bg-white dark:bg-slate-900 z-[120] translate-x-full drawer shadow-2xl flex flex-col">
+      <div class="p-6 border-b dark:border-slate-800 flex justify-between items-center bg-gray-50 dark:bg-slate-800/50">
+        <h2 class="font-bold text-xl uppercase tracking-widest">Your Cart</h2>
+        <button onclick="closeAllDrawers()" class="text-3xl">&times;</button>
+      </div>
+      <div id="cart-items-container" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
+      <div class="p-6 border-t dark:border-slate-800">
+        <div class="flex justify-between font-black text-xl mb-6">
+          <span>Total:</span>
+          <span id="cart-total" class="text-brand">$0.00</span>
+        </div>
+        <button onclick="window.location.href='checkout.html'" class="w-full bg-brand text-white py-4 rounded-2xl font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-500/30 tracking-widest uppercase">
+          Proceed to Checkout
+        </button>
+      </div>
+    </div>
+
+    <!-- Wishlist Sidebar -->
+    <div id="wishlist-sidebar" class="fixed top-0 right-0 h-full w-full max-w-[400px] bg-white dark:bg-slate-900 z-[120] translate-x-full drawer shadow-2xl flex flex-col">
+      <div class="p-6 border-b dark:border-slate-800 flex justify-between items-center">
+        <h2 class="font-bold text-xl text-red-500 uppercase tracking-widest">Favorites</h2>
+        <button onclick="closeAllDrawers()" class="text-3xl">&times;</button>
+      </div>
+      <div id="wishlist-items-container" class="flex-1 overflow-y-auto p-4"></div>
+    </div>
+
+    <!-- HERO -->
+    <section id="home" class="relative h-[600px] lg:h-[800px] mt-[72px] overflow-hidden">
+      <div class="swiper heroSwiper h-full">
+        <div class="swiper-wrapper">
+          <!-- Slide 1 -->
+          <div class="swiper-slide relative overflow-hidden">
+            <video autoplay muted loop style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="thef.mp4" type="video/mp4" /></video>
+            <div class="absolute inset-0 bg-black/40 flex items-center">
+              <div class="container mx-auto px-6 hero-text text-white">
+                <span class="bg-brand px-4 py-1 rounded-full text-xs font-bold uppercase mb-4 inline-block tracking-widest">Professional Power</span>
+                <h1 class="text-5xl lg:text-8xl font-black mb-6 leading-tight uppercase">MacBook Pro M3<br />The Power House.</h1>
+                <p class="text-lg opacity-80 max-w-xl mb-8">Experience the most advanced chip ever built for a personal computer.</p>
+                <button class="bg-white text-brand px-10 py-4 rounded-2xl font-bold text-lg hover:bg-brand hover:text-white transition-all shadow-xl">Order Now</button>
+              </div>
+            </div>
+          </div>
+          <!-- ✅ Slide 2 - Fixed: background-image بدل img عشان ما يبقاش أسود -->
+          <div class="swiper-slide relative overflow-hidden">
+            <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1603481588273-2f908a9a7a1b?w=1920&q=80') center/cover no-repeat;"></div>
+            <div class="absolute inset-0 bg-purple-900/50 flex items-center">
+              <div class="container mx-auto px-6 hero-text text-white">
+                <span class="bg-purple-600 px-4 py-1 rounded-full text-xs font-bold uppercase mb-4 inline-block tracking-widest">Gaming Evolution</span>
+                <h1 class="text-5xl lg:text-8xl font-black mb-6 leading-tight uppercase">Level Up Your<br />Experience.</h1>
+                <p class="text-lg opacity-80 max-w-xl mb-8">Dominate every game with our new RGB mechanical gear collection.</p>
+                <button class="bg-purple-600 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-purple-700 transition-all shadow-xl">Explore Gear</button>
+              </div>
+            </div>
+          </div>
+          <!-- Slide 3 -->
+          <div class="swiper-slide relative overflow-hidden">
+            <video autoplay muted loop style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="sli2.mp4" type="video/mp4" /></video>
+            <div class="absolute inset-0 bg-blue-900/30 flex items-center justify-center text-center">
+              <div class="container mx-auto px-6 hero-text text-white">
+                <span class="bg-green-500 px-4 py-1 rounded-full text-xs font-bold uppercase mb-4 inline-block tracking-widest">Fitness Focus</span>
+                <h1 class="text-5xl lg:text-8xl font-black mb-6 leading-tight uppercase">Smart Tracking.<br />Perfect Fit.</h1>
+                <p class="text-lg opacity-80 max-w-2xl mx-auto mb-8">The all-new Ultra Smart Watch collection is ready for your next adventure.</p>
+                <button class="bg-green-500 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-green-600 transition-all">Shop Collection</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next !text-white !hidden lg:!flex"></div>
+        <div class="swiper-button-prev !text-white !hidden lg:!flex"></div>
+      </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section id="products" class="py-24 container mx-auto px-4">
+      <h2 class="text-4xl font-black mb-8 border-l-8 border-brand pl-6 uppercase tracking-tighter" data-aos="fade-right">Featured Tech</h2>
+      <div class="flex flex-wrap gap-3 mb-8 justify-center lg:justify-start" data-aos="fade-up">
+        <button onclick="filterProducts('all')" class="filter-btn active bg-brand text-white px-6 py-3 rounded-2xl font-bold uppercase text-sm tracking-wider hover:bg-blue-700 transition shadow-lg"><i class="fa-solid fa-grip mr-2"></i>All Products</button>
+        <button onclick="filterProducts('laptop')" class="filter-btn bg-gray-200 dark:bg-slate-700 text-slate-800 dark:text-white px-6 py-3 rounded-2xl font-bold uppercase text-sm tracking-wider hover:bg-brand hover:text-white transition"><i class="fa-solid fa-laptop mr-2"></i>Laptops</button>
+        <button onclick="filterProducts('phone')" class="filter-btn bg-gray-200 dark:bg-slate-700 text-slate-800 dark:text-white px-6 py-3 rounded-2xl font-bold uppercase text-sm tracking-wider hover:bg-brand hover:text-white transition"><i class="fa-solid fa-mobile-screen-button mr-2"></i>Phones</button>
+        <button onclick="filterProducts('tablet')" class="filter-btn bg-gray-200 dark:bg-slate-700 text-slate-800 dark:text-white px-6 py-3 rounded-2xl font-bold uppercase text-sm tracking-wider hover:bg-brand hover:text-white transition"><i class="fa-solid fa-tablet-screen-alt mr-2"></i>Tablets</button>
+        <button onclick="filterProducts('watch')" class="filter-btn bg-gray-200 dark:bg-slate-700 text-slate-800 dark:text-white px-6 py-3 rounded-2xl font-bold uppercase text-sm tracking-wider hover:bg-brand hover:text-white transition"><i class="fa-solid fa-clock mr-2"></i>Watches</button>
+        <button onclick="filterProducts('accessories')" class="filter-btn bg-gray-200 dark:bg-slate-700 text-slate-800 dark:text-white px-6 py-3 rounded-2xl font-bold uppercase text-sm tracking-wider hover:bg-brand hover:text-white transition"><i class="fa-solid fa-headphones mr-2"></i>Accessories</button>
+      </div>
+      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
+    </section>
+
+    <!-- SALES -->
+    <section id="sales" class="py-20 bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12" data-aos="fade-up">
+          <span class="bg-red-500 text-white px-6 py-2 rounded-full text-sm font-bold animate-pulse uppercase inline-block mb-4 shadow-lg shadow-red-500/50"><i class="fa-solid fa-fire mr-2 animate-bounce"></i>Flash Sale - Limited Time</span>
+          <h2 class="text-5xl lg:text-6xl font-black mb-4 uppercase bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">Up To 50% Off</h2>
+          <p class="text-gray-600 dark:text-gray-400 text-lg mb-8">Grab these amazing deals before time runs out!</p>
+          <div class="flex gap-3 justify-center flex-wrap mb-8">
+            <div class="countdown-box bg-gradient-to-br from-slate-900 to-slate-800 text-white p-5 rounded-2xl min-w-[90px] text-center shadow-xl"><span id="countdown-days" class="block text-4xl font-black text-brand mb-1">00</span><span class="text-xs uppercase tracking-wider opacity-70">Days</span></div>
+            <div class="countdown-box bg-gradient-to-br from-slate-900 to-slate-800 text-white p-5 rounded-2xl min-w-[90px] text-center shadow-xl"><span id="countdown-hours" class="block text-4xl font-black text-brand mb-1">00</span><span class="text-xs uppercase tracking-wider opacity-70">Hours</span></div>
+            <div class="countdown-box bg-gradient-to-br from-slate-900 to-slate-800 text-white p-5 rounded-2xl min-w-[90px] text-center shadow-xl"><span id="countdown-minutes" class="block text-4xl font-black text-brand mb-1">00</span><span class="text-xs uppercase tracking-wider opacity-70">Minutes</span></div>
+            <div class="countdown-box bg-gradient-to-br from-slate-900 to-slate-800 text-white p-5 rounded-2xl min-w-[90px] text-center shadow-xl"><span id="countdown-seconds" class="block text-4xl font-black text-red-500 mb-1">00</span><span class="text-xs uppercase tracking-wider opacity-70">Seconds</span></div>
+          </div>
+        </div>
+        <div id="sale-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" data-aos="fade-up"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="py-24 container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center" data-aos="fade-up">
+        <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-lg hover:shadow-xl transition"><i class="fa-solid fa-truck-fast text-5xl text-brand mb-6"></i><h4 class="font-bold text-xl mb-3 uppercase tracking-widest">Global Delivery</h4><p class="text-gray-500 text-sm">We ship your gadgets anywhere in 24h.</p></div>
+        <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-lg hover:shadow-xl transition"><i class="fa-solid fa-shield-halved text-5xl text-brand mb-6"></i><h4 class="font-bold text-xl mb-3 uppercase tracking-widest">2-Year Warranty</h4><p class="text-gray-500 text-sm">Full coverage for every device we sell.</p></div>
+        <div class="bg-white dark:bg-cardDark p-8 rounded-3xl shadow-lg hover:shadow-xl transition"><i class="fa-solid fa-headset text-5xl text-brand mb-6"></i><h4 class="font-bold text-xl mb-3 uppercase tracking-widest">Pro Support</h4><p class="text-gray-500 text-sm">Technical support ready to help 24/7.</p></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="py-20 bg-slate-100 dark:bg-slate-800/50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-black mb-12 text-center uppercase tracking-tighter" data-aos="fade-up">Get In Touch</h2>
+        <div class="max-w-2xl mx-auto bg-white dark:bg-cardDark rounded-3xl p-8 shadow-xl" data-aos="fade-up">
+          <form class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <input type="text" placeholder="Your Name" class="w-full px-6 py-4 rounded-2xl bg-gray-50 dark:bg-slate-800 border-2 border-transparent focus:border-brand outline-none transition" />
+              <input type="email" placeholder="Your Email" class="w-full px-6 py-4 rounded-2xl bg-gray-50 dark:bg-slate-800 border-2 border-transparent focus:border-brand outline-none transition" />
+            </div>
+            <input type="text" placeholder="Subject" class="w-full px-6 py-4 rounded-2xl bg-gray-50 dark:bg-slate-800 border-2 border-transparent focus:border-brand outline-none transition" />
+            <textarea rows="5" placeholder="Your Message" class="w-full px-6 py-4 rounded-2xl bg-gray-50 dark:bg-slate-800 border-2 border-transparent focus:border-brand outline-none transition resize-none"></textarea>
+            <button type="submit" class="w-full bg-brand text-white py-4 rounded-2xl font-bold uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-500/30"><i class="fa-solid fa-paper-plane mr-2"></i>Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-gray-400 pt-20 pb-10">
+      <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12 mb-10">
+        <div><h3 class="text-3xl font-black text-white mb-6 uppercase tracking-widest">ElectroSky</h3><p>Your portal to the digital future. Quality and Innovation.</p></div>
+        <div><h4 class="text-white font-bold mb-4 uppercase">Quick Links</h4><ul class="space-y-2"><li><a href="#home" class="hover:text-brand transition">Home</a></li><li><a href="#products" class="hover:text-brand transition">Products</a></li><li><a href="#sales" class="hover:text-brand transition">Sales</a></li><li><a href="#about" class="hover:text-brand transition">About Us</a></li></ul></div>
+        <div><h4 class="text-white font-bold mb-4 uppercase">Direct Contact</h4><p>support@electrosky.com<br />+1 555-TECH-SKY</p></div>
+        <div><h4 class="text-white font-bold mb-4 uppercase">Follow Us</h4><div class="flex gap-4 text-2xl"><a href="#" class="hover:text-brand transition"><i class="fa-brands fa-instagram"></i></a><a href="#" class="hover:text-brand transition"><i class="fa-brands fa-facebook"></i></a><a href="#" class="hover:text-brand transition"><i class="fa-brands fa-twitter"></i></a><a href="#" class="hover:text-brand transition"><i class="fa-brands fa-youtube"></i></a></div></div>
+      </div>
+      <div class="border-t border-slate-800 text-center pt-8 text-[10px] uppercase tracking-widest">&copy; 2026 ElectroSky. All rights reserved.</div>
+    </footer>
+
+    <!-- PRODUCT MODAL -->
+    <div id="modal-overlay" class="fixed inset-0 bg-black/80 z-[200] hidden backdrop-blur-md" onclick="closeProductModal()"></div>
+    <div id="product-modal" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-4xl bg-white dark:bg-cardDark z-[210] hidden rounded-[3rem] overflow-hidden shadow-2xl flex flex-col md:flex-row transform scale-90 opacity-0 transition-all duration-300">
+      <div class="md:w-1/2 p-8 bg-gray-50 dark:bg-slate-800 flex flex-col items-center justify-center">
+        <div class="h-64 flex items-center justify-center mb-6"><img id="modal-main-img" src="" class="max-h-full object-contain transition-all duration-300" /></div>
+        <div id="modal-thumbnails" class="flex gap-3 mt-4"></div>
+      </div>
+      <div class="md:w-1/2 p-12 relative flex flex-col">
+        <button onclick="closeProductModal()" class="absolute top-8 right-8 text-3xl hover:text-red-500">&times;</button>
+        <div id="modal-sale-badge" class="hidden absolute top-8 left-12">
+          <span class="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase shadow-lg"><i class="fa-solid fa-fire mr-1"></i><span id="modal-discount">50% OFF</span></span>
+        </div>
+        <h2 id="modal-name" class="text-3xl font-black mb-2 uppercase leading-tight mt-8"></h2>
+        <div class="mb-6">
+          <p id="modal-original-price" class="text-lg text-gray-400 line-through hidden"></p>
+          <p id="modal-price-val" class="text-3xl font-black text-brand"></p>
+        </div>
+        <div class="mb-6">
+          <p class="font-bold text-xs uppercase mb-3">Color:</p>
+          <div class="flex gap-3">
+            <div onclick="selectOpt(this,'color-dot')" class="color-dot w-8 h-8 rounded-full bg-black cursor-pointer active shadow-lg"></div>
+            <div onclick="selectOpt(this,'color-dot')" class="color-dot w-8 h-8 rounded-full bg-slate-400 cursor-pointer shadow-lg"></div>
+            <div onclick="selectOpt(this,'color-dot')" class="color-dot w-8 h-8 rounded-full bg-brand cursor-pointer shadow-lg"></div>
+          </div>
+        </div>
+        <div class="mb-8">
+          <p class="font-bold text-xs uppercase mb-3">Storage:</p>
+          <div class="flex gap-2">
+            <button onclick="selectOpt(this,'spec-btn')" class="spec-btn border dark:border-slate-700 px-4 py-2 rounded-xl text-[10px] font-black active uppercase">256GB</button>
+            <button onclick="selectOpt(this,'spec-btn')" class="spec-btn border dark:border-slate-700 px-4 py-2 rounded-xl text-[10px] font-black uppercase">512GB</button>
+            <button onclick="selectOpt(this,'spec-btn')" class="spec-btn border dark:border-slate-700 px-4 py-2 rounded-xl text-[10px] font-black uppercase">1TB</button>
+          </div>
+        </div>
+        <div class="flex flex-col gap-3 mt-auto">
+          <button id="modal-add-to-cart" class="w-full bg-slate-900 dark:bg-brand text-white py-4 rounded-2xl font-bold uppercase tracking-widest hover:opacity-90 transition">
+            <i class="fa-solid fa-cart-plus mr-2"></i>Add To Cart
+          </button>
+          <!-- ✅ FIX: Buy Now بيبعت المنتج ده بس للشيك اوت -->
+          <button onclick="buyNow()" class="w-full border-2 border-brand text-brand py-4 rounded-2xl font-bold hover:bg-brand hover:text-white transition uppercase tracking-widest">
+            Buy It Now
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({ once: true });
+
+      const heroSwiper = new Swiper(".heroSwiper", {
+        loop: true, effect: "fade", speed: 1000,
+        autoplay: { delay: 5000, disableOnInteraction: false },
+        pagination: { el: ".swiper-pagination", clickable: true },
+        navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+      });
+
+      function startCountdown() {
+        const savedEndDate = localStorage.getItem("saleEndDate");
+        let endDate;
+        if (savedEndDate && new Date(savedEndDate) > new Date()) { endDate = new Date(savedEndDate); }
+        else { endDate = new Date(); endDate.setDate(endDate.getDate() + 3); endDate.setHours(23,59,59,999); localStorage.setItem("saleEndDate", endDate.toISOString()); }
+        function updateCountdown() {
+          const diff = endDate - new Date();
+          if (diff <= 0) { localStorage.removeItem("saleEndDate"); return; }
+          document.getElementById("countdown-days").textContent = String(Math.floor(diff/86400000)).padStart(2,"0");
+          document.getElementById("countdown-hours").textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,"0");
+          document.getElementById("countdown-minutes").textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,"0");
+          document.getElementById("countdown-seconds").textContent = String(Math.floor((diff%60000)/1000)).padStart(2,"0");
+        }
+        updateCountdown(); setInterval(updateCountdown, 1000);
+      }
+      startCountdown();
+
+      function toggleMobileMenu() {
+        const menu = document.getElementById("mobile-menu");
+        const overlay = document.getElementById("mobile-menu-overlay");
+        const btn = document.getElementById("mobile-menu-btn");
+        menu.classList.toggle("open"); overlay.classList.toggle("hidden");
+        const icon = btn.querySelector("i");
+        menu.classList.contains("open") ? icon.classList.replace("fa-bars","fa-times") : icon.classList.replace("fa-times","fa-bars");
+      }
+
+      function toggleSearch() {
+        const modal = document.getElementById("search-modal");
+        const box = document.getElementById("search-box");
+        if (modal.classList.contains("hidden")) {
+          modal.classList.remove("hidden");
+          setTimeout(() => { box.classList.remove("scale-95","opacity-0"); document.getElementById("search-input").focus(); }, 10);
+        } else { box.classList.add("scale-95","opacity-0"); setTimeout(() => modal.classList.add("hidden"), 300); }
+      }
+
+      document.getElementById("search-input")?.addEventListener("input", function(e) {
+        const query = e.target.value.toLowerCase();
+        const results = document.getElementById("search-results");
+        if (query.length < 2) { results.innerHTML = '<p class="text-gray-500 text-center py-8">Type to search...</p>'; return; }
+        const allProducts = [...products, ...saleProducts];
+        const filtered = allProducts.filter(p => p.name.toLowerCase().includes(query) || (p.category && p.category.toLowerCase().includes(query)));
+        if (filtered.length === 0) { results.innerHTML = '<p class="text-gray-500 text-center py-8">No products found</p>'; return; }
+        results.innerHTML = filtered.map(p => {
+          const isSale = p.onSale || false;
+          const displayPrice = p.salePrice || p.price;
+          return `<div class="flex items-center gap-4 p-4 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-2xl cursor-pointer transition" onclick="openProductModal(${p.id},${isSale}); toggleSearch();">
+            <img src="${p.img}" class="w-16 h-16 object-contain rounded-xl bg-gray-100 dark:bg-slate-700">
+            <div class="flex-1"><div class="flex items-center gap-2 mb-1"><h4 class="font-bold">${p.name}</h4>${isSale ? '<span class="bg-red-500 text-white px-2 py-0.5 rounded text-xs font-bold">SALE</span>' : ''}</div><span class="text-xs text-gray-500 capitalize">${p.category||'Product'}</span></div>
+            <div class="text-right">${p.salePrice ? `<p class="text-xs text-gray-400 line-through">$${p.price}</p>` : ''}<p class="text-brand font-bold text-lg">$${displayPrice}</p></div>
+          </div>`;
+        }).join("");
+      });
+
+      document.addEventListener("keydown", e => { if (e.key === "Escape" && !document.getElementById("search-modal").classList.contains("hidden")) toggleSearch(); });
+
+      window.addEventListener("scroll", () => {
+        let current = "";
+        document.querySelectorAll("section[id]").forEach(s => { if (scrollY >= s.offsetTop - 200) current = s.getAttribute("id"); });
+        document.querySelectorAll(".nav-link").forEach(link => link.classList.toggle("active", link.getAttribute("href") === "#" + current));
+      });
+
+      const products = [
+        { id: 1, name: "MacBook Pro M3", price: 1999, category: "laptop", img: "product/laptoop2.jpg", gallery: ["product/laptoop.jpg","product/laptoop2.jpg","product/laptoop3.jpg"] },
+        { id: 2, name: "iPhone 15 Pro", price: 1199, category: "phone", img: "product/iphon2222.jpg", gallery: ["product/iphon22.jpg","product/iphon222.jpg","product/iphon2.jpg"] },
+        { id: 3, name: "Sony XM5 Headphones", price: 348, category: "accessories", img: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=500", gallery: ["https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=500","https://images.unsplash.com/photo-1545127398-14699f92334b?w=500","https://images.unsplash.com/photo-1583394838336-acd977736f90?w=500"] },
+        { id: 4, name: "Samsung S24 Ultra", price: 1299, category: "phone", img: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=500", gallery: ["https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=500","https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500"] },
+        { id: 5, name: "Apple Watch Ultra", price: 799, category: "watch", img: "product/appw1.jpg", gallery: ["product/appw11.jpg","product/appw111.jpg"] },
+        { id: 6, name: "iPad Pro M2", price: 999, category: "tablet", img: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500", gallery: ["https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500","product/ipad.jpg"] },
+        { id: 7, name: "Gaming Desktop ROG", price: 2499, category: "laptop", img: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=500", gallery: ["https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=500","https://images.unsplash.com/photo-1593642532842-98d0fd5ebc1a?w=500"] },
+        { id: 8, name: "AirPods Max", price: 549, category: "accessories", img: "product/air1.jpg", gallery: ["product/air1.jpg","https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=500"] },
+      ];
+
+      const saleProducts = [
+        { id: 101, name: "MacBook Air M2", price: 1299, salePrice: 649, discount: 50, category: "laptop", img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500", gallery: ["https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500","https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500"], onSale: true },
+        { id: 102, name: "AirPods Pro 2", price: 249, salePrice: 149, discount: 40, category: "accessories", img: "https://images.unsplash.com/photo-1606841837239-c5a1a4a07af7?w=500", gallery: ["https://images.unsplash.com/photo-1606841837239-c5a1a4a07af7?w=500","https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=500"], onSale: true },
+        { id: 103, name: "iPad Air 5th Gen", price: 799, salePrice: 479, discount: 40, category: "tablet", img: "product/iPad Air 5th Gen.webp", gallery: ["product/iPad Air 5th Gen.webp","product/iPad Air 5th Gen2.png"], onSale: true },
+        { id: 104, name: "Magic Keyboard", price: 349, salePrice: 174, discount: 50, category: "accessories", img: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500", gallery: ["https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500","https://images.unsplash.com/photo-1595225476474-87563907a212?w=500"], onSale: true },
+        { id: 105, name: "Apple Pencil 2", price: 129, salePrice: 77, discount: 40, category: "accessories", img: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=500", gallery: ["https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=500"], onSale: true },
+        { id: 106, name: "HomePod Mini", price: 99, salePrice: 59, discount: 40, category: "accessories", img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500", gallery: ["https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500","product/homepod-graphic-3.webp"], onSale: true },
+        { id: 107, name: "MagSafe Charger", price: 39, salePrice: 19, discount: 50, category: "accessories", img: "product/MagSafe Charger.webp", gallery: ["product/MagSafe Charger.webp","product/MagSafe Charger2.jpg"], onSale: true },
+        { id: 108, name: "Apple Watch SE", price: 279, salePrice: 167, discount: 40, category: "watch", img: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500", gallery: ["https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500","https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=500"], onSale: true },
+      ];
+
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      let currentFilter = "all";
+
+      // ✅ متغير لحفظ المنتج الحالي في المودال
+      let currentModalProduct = null;
+      let currentModalIsSale = false;
+
+      function filterProducts(category) {
+        currentFilter = category;
+        document.querySelectorAll(".filter-btn").forEach(btn => {
+          btn.classList.remove("active","bg-brand","text-white");
+          btn.classList.add("bg-gray-200","dark:bg-slate-700","text-slate-800","dark:text-white");
+        });
+        document.querySelectorAll(".filter-btn").forEach(btn => {
+          if (btn.textContent.toLowerCase().includes(category) || (category==="all" && btn.textContent.toLowerCase().includes("all"))) {
+            btn.classList.add("active","bg-brand","text-white");
+            btn.classList.remove("bg-gray-200","dark:bg-slate-700","text-slate-800","dark:text-white");
+          }
+        });
+        renderProducts();
+      }
+
+      function renderProducts() {
+        const filtered = currentFilter === "all" ? products : products.filter(p => p.category === currentFilter);
+        if (filtered.length === 0) { document.getElementById("product-grid").innerHTML = `<div class="col-span-full text-center py-20"><i class="fa-solid fa-box-open text-6xl text-gray-300 mb-4"></i><p class="text-gray-500 text-xl">No products found</p></div>`; return; }
+        document.getElementById("product-grid").innerHTML = filtered.map(p => {
+          const isFav = wishlist.some(item => item.id === p.id);
+          return `<div class="bg-white dark:bg-cardDark rounded-[2.5rem] p-6 shadow-xl hover:-translate-y-3 transition-all group cursor-pointer" data-aos="fade-up" onclick="openProductModal(${p.id},false)">
+            <div class="relative h-60 mb-6 rounded-[2rem] bg-gray-50 dark:bg-slate-800 overflow-hidden">
+              <img src="${p.img}" class="w-full h-full object-contain group-hover:scale-110 transition duration-700">
+              <button onclick="event.stopPropagation(); toggleFav(${p.id},false)" class="absolute top-4 right-4 bg-white/80 dark:bg-slate-700/80 w-10 h-10 rounded-2xl flex items-center justify-center">
+                <i class="${isFav ? 'fa-solid text-red-500' : 'fa-regular'} fa-heart"></i>
+              </button>
+            </div>
+            <h3 class="font-black text-lg mb-2 truncate uppercase tracking-tight">${p.name}</h3>
+            <div class="flex justify-between items-center">
+              <span class="text-brand font-black text-xl">$${p.price}</span>
+              <button onclick="event.stopPropagation(); addToCart(${p.id},false)" class="bg-brand text-white w-12 h-12 rounded-xl active:scale-90 transition"><i class="fa-solid fa-cart-plus"></i></button>
+            </div>
+          </div>`;
+        }).join("");
+      }
+
+      function renderSaleProducts() {
+        document.getElementById("sale-products-grid").innerHTML = saleProducts.map(p => {
+          const isFav = wishlist.some(item => item.id === p.id);
+          return `<div class="bg-white dark:bg-cardDark rounded-[2.5rem] p-6 shadow-xl hover:-translate-y-3 transition-all group relative overflow-hidden cursor-pointer" data-aos="fade-up" onclick="openProductModal(${p.id},true)">
+            <div class="absolute top-4 left-4 z-10"><span class="sale-badge bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase shadow-lg"><i class="fa-solid fa-fire mr-1"></i>${p.discount}% OFF</span></div>
+            <div class="relative h-60 mb-6 rounded-[2rem] bg-gray-50 dark:bg-slate-800 overflow-hidden">
+              <img src="${p.img}" class="w-full h-full object-contain group-hover:scale-110 transition duration-700">
+              <button onclick="event.stopPropagation(); toggleFav(${p.id},true)" class="absolute top-4 right-4 bg-white/80 dark:bg-slate-700/80 w-10 h-10 rounded-2xl flex items-center justify-center">
+                <i class="${isFav ? 'fa-solid text-red-500' : 'fa-regular'} fa-heart"></i>
+              </button>
+            </div>
+            <h3 class="font-black text-lg mb-2 truncate uppercase tracking-tight">${p.name}</h3>
+            <div class="flex justify-between items-center">
+              <div><p class="text-gray-400 text-sm line-through">$${p.price}</p><span class="text-red-500 font-black text-xl">$${p.salePrice}</span></div>
+              <button onclick="event.stopPropagation(); addToCart(${p.id},true)" class="bg-red-500 text-white w-12 h-12 rounded-xl active:scale-90 transition hover:bg-red-600"><i class="fa-solid fa-cart-plus"></i></button>
+            </div>
+          </div>`;
+        }).join("");
+      }
+
+      function openProductModal(id, isSaleProduct) {
+        const p = isSaleProduct ? saleProducts.find(prod => prod.id === id) : products.find(prod => prod.id === id);
+        // ✅ نحفظ المنتج الحالي
+        currentModalProduct = p;
+        currentModalIsSale = isSaleProduct;
+
+        document.getElementById("modal-name").innerText = p.name;
+        if (isSaleProduct) {
+          document.getElementById("modal-original-price").innerText = "$" + p.price;
+          document.getElementById("modal-original-price").classList.remove("hidden");
+          document.getElementById("modal-price-val").innerText = "$" + p.salePrice;
+          document.getElementById("modal-sale-badge").classList.remove("hidden");
+          document.getElementById("modal-discount").innerText = p.discount + "% OFF";
+        } else {
+          document.getElementById("modal-original-price").classList.add("hidden");
+          document.getElementById("modal-price-val").innerText = "$" + p.price;
+          document.getElementById("modal-sale-badge").classList.add("hidden");
+        }
+        document.getElementById("modal-main-img").src = p.img;
+        document.getElementById("modal-thumbnails").innerHTML = p.gallery.map(imgSrc =>
+          `<img src="${imgSrc}" class="thumb-img w-16 h-16 rounded-xl object-contain bg-white cursor-pointer border-2 shadow-sm" onmouseover="document.getElementById('modal-main-img').src='${imgSrc}'">`
+        ).join("");
+        document.getElementById("modal-overlay").classList.remove("hidden");
+        const m = document.getElementById("product-modal");
+        m.classList.remove("hidden");
+        setTimeout(() => m.classList.remove("scale-90","opacity-0"), 10);
+        document.getElementById("modal-add-to-cart").onclick = () => { addToCart(p.id, isSaleProduct); closeProductModal(); };
+      }
+
+      function selectOpt(el, cls) {
+        document.querySelectorAll("."+cls).forEach(e => e.classList.remove("active"));
+        el.classList.add("active");
+      }
+
+      function closeProductModal() {
+        document.getElementById("product-modal").classList.add("scale-90","opacity-0");
+        setTimeout(() => {
+          document.getElementById("product-modal").classList.add("hidden");
+          document.getElementById("modal-overlay").classList.add("hidden");
+        }, 300);
+      }
+
+      // ✅ FIX: buyNow بيبعت المنتج ده بس في buyNowCart منفصل عن الكارت العادي
+      function buyNow() {
+        if (!currentModalProduct) return;
+        const buyNowItem = { ...currentModalProduct, quantity: 1 };
+        localStorage.setItem("buyNowCart", JSON.stringify([buyNowItem]));
+        closeProductModal();
+        setTimeout(() => { window.location.href = "checkout.html"; }, 150);
+      }
+
+      function toggleDrawer(id) {
+        closeAllDrawers();
+        document.getElementById(id).classList.remove("translate-x-full");
+        document.getElementById("sidebar-overlay").classList.remove("hidden");
+      }
+
+      function closeAllDrawers() {
+        document.querySelectorAll(".drawer").forEach(d => d.classList.add("translate-x-full"));
+        document.getElementById("sidebar-overlay").classList.add("hidden");
+      }
+
+      function addToCart(id, isSaleProduct) {
+        const product = isSaleProduct ? saleProducts.find(p => p.id === id) : products.find(p => p.id === id);
+        const existingItem = cart.find(item => item.id === id);
+        if (existingItem) { existingItem.quantity = (existingItem.quantity||1) + 1; }
+        else { cart.push({ ...product, quantity: 1 }); }
+        updateUI(); toggleDrawer("cart-sidebar");
+      }
+
+      function increaseQuantity(id) { const item = cart.find(p => p.id === id); if (item) { item.quantity = (item.quantity||1) + 1; updateUI(); } }
+      function decreaseQuantity(id) { const item = cart.find(p => p.id === id); if (item) { if (item.quantity > 1) { item.quantity -= 1; } else { cart.splice(cart.findIndex(p => p.id === id), 1); } updateUI(); } }
+      function removeFromCart(id) { cart.splice(cart.findIndex(p => p.id === id), 1); updateUI(); }
+
+      function toggleFav(id, isSaleProduct) {
+        const product = isSaleProduct ? saleProducts.find(p => p.id === id) : products.find(p => p.id === id);
+        const idx = wishlist.findIndex(p => p.id === id);
+        if (idx === -1) { wishlist.push(product); } else { wishlist.splice(idx, 1); }
+        updateUI(); renderProducts(); renderSaleProducts();
+      }
+
+      function updateUI() {
+        localStorage.setItem("cart", JSON.stringify(cart));
+        localStorage.setItem("wishlist", JSON.stringify(wishlist));
+        document.getElementById("cart-count-badge").innerText = cart.reduce((sum, item) => sum + (item.quantity||1), 0);
+        document.getElementById("fav-count").innerText = wishlist.length;
+
+        let total = 0;
+        const cartContainer = document.getElementById("cart-items-container");
+        const checkoutBtn = document.querySelector('#cart-sidebar button[onclick*="checkout.html"]');
+
+        if (cart.length === 0) {
+          cartContainer.innerHTML = '<p class="text-center opacity-40 py-10">Your cart is empty</p>';
+          checkoutBtn.disabled = true; checkoutBtn.style.opacity = "0.5"; checkoutBtn.style.cursor = "not-allowed";
+        } else {
+          cartContainer.innerHTML = cart.map(item => {
+            const price = item.salePrice || item.price;
+            const quantity = item.quantity || 1;
+            const itemTotal = price * quantity;
+            total += itemTotal;
+            return `<div class="bg-gray-50 dark:bg-slate-800 p-4 rounded-2xl">
+              <div class="flex gap-4 items-start mb-3">
+                <img src="${item.img}" class="w-16 h-16 object-contain rounded-xl bg-white">
+                <div class="flex-1"><h4 class="font-bold text-sm mb-1">${item.name}</h4><p class="text-brand font-black text-lg">$${price}</p></div>
+                <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash-can"></i></button>
+              </div>
+              <div class="flex items-center justify-between bg-white dark:bg-slate-700 rounded-xl p-2">
+                <button onclick="decreaseQuantity(${item.id})" class="w-8 h-8 rounded-lg bg-gray-200 dark:bg-slate-600 hover:bg-brand hover:text-white transition flex items-center justify-center font-bold"><i class="fa-solid fa-minus text-xs"></i></button>
+                <span class="font-black text-lg px-4">${quantity}</span>
+                <button onclick="increaseQuantity(${item.id})" class="w-8 h-8 rounded-lg bg-gray-200 dark:bg-slate-600 hover:bg-brand hover:text-white transition flex items-center justify-center font-bold"><i class="fa-solid fa-plus text-xs"></i></button>
+              </div>
+              <div class="mt-2 text-right"><span class="text-xs text-gray-500">Subtotal: </span><span class="font-black text-brand">$${itemTotal.toFixed(2)}</span></div>
+            </div>`;
+          }).join("");
+          checkoutBtn.disabled = false; checkoutBtn.style.opacity = "1"; checkoutBtn.style.cursor = "pointer";
+        }
+
+        document.getElementById("cart-total").innerText = `$${total.toFixed(2)}`;
+        document.getElementById("wishlist-items-container").innerHTML = wishlist.length
+          ? wishlist.map((item, idx) => `<div class="flex gap-4 items-center bg-gray-50 dark:bg-slate-800 p-4 rounded-2xl mb-4">
+              <img src="${item.img}" class="w-12 h-12 object-contain">
+              <div class="flex-1 font-bold text-sm">${item.name}</div>
+              <button onclick="wishlist.splice(${idx},1); updateUI(); renderProducts(); renderSaleProducts()" class="text-red-500 font-black">&times;</button>
+            </div>`).join("")
+          : '<p class="text-center opacity-40 py-10">No favorites</p>';
+      }
+
+      document.getElementById("theme-btn").addEventListener("click", () => {
+        document.documentElement.classList.toggle("dark");
+        localStorage.setItem("theme", document.documentElement.classList.contains("dark") ? "dark" : "light");
+      });
+      if (localStorage.getItem("theme") === "dark") document.documentElement.classList.add("dark");
+
+      renderProducts(); renderSaleProducts(); updateUI();
+    </script>
+  </body>
+</html>

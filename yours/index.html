@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Apple Store</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+
+  <body class="overflow-hidden">
+    <section
+      id="intro"
+      class="fixed inset-0 z-50 flex items-center justify-center"
+    >
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        class="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="intro.mp4" type="video/mp4" />
+      </video>
+
+      <div
+        id="overlay"
+        class="absolute inset-0 bg-black/0 backdrop-blur-0 transition-all duration-[2000ms]"
+      ></div>
+
+      <h1
+        id="introText"
+        class="relative text-white text-4xl md:text-6xl font-bold tracking-wide opacity-0 translate-y-16 transition-all duration-[2000ms]"
+      >
+        The Difference Is Here
+      </h1>
+    </section>
+
+    <!-- Background Slides -->
+    <div class="fashion-bg">
+      <div class="slide s1"></div>
+      <div class="slide s2"></div>
+      <div class="slide s3"></div>
+    </div>
+
+    <!-- ✅ Auth Box - Modified -->
+    <div class="container-hidden" id="authBox">
+      <div class="card-container" id="cardContainer">
+        <div class="card" id="card">
+          <!-- Login Form -->
+          <div class="form-container login-form">
+            <div class="form login">
+              <div class="form-icon">
+                <i class="fas fa-user-lock"></i>
+              </div>
+              <h2>Welcome Back</h2>
+              <p class="form-subtitle">Login to your account</p>
+
+              <div class="input-group">
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="email" id="lemail" placeholder="Email Address" />
+              </div>
+              <div class="input-group">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" id="lpass" placeholder="Password" />
+                <i
+                  class="fas fa-eye toggle-password"
+                  onclick="togglePassword('lpass', this)"
+                ></i>
+              </div>
+
+              <div class="forgot-pass">
+                <a href="#">Forgot Password?</a>
+              </div>
+
+              <button onclick="login()" class="login-btn">
+                <span>Login</span>
+                <i class="fas fa-arrow-right"></i>
+              </button>
+
+              <div class="divider">
+                <span>or</span>
+              </div>
+
+              <div class="social-login">
+                <button class="social-btn google">
+                  <i class="fab fa-google"></i>
+                </button>
+                <button class="social-btn apple">
+                  <i class="fab fa-apple"></i>
+                </button>
+                <button class="social-btn facebook">
+                  <i class="fab fa-facebook-f"></i>
+                </button>
+              </div>
+
+              <p class="switch-form">
+                Don't have an account?
+                <span onclick="goRegister()">Create one</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Register Form -->
+          <div class="form-container register-form">
+            <div class="form register">
+              <div class="form-icon">
+                <i class="fas fa-user-plus"></i>
+              </div>
+              <h2>Create Account</h2>
+              <p class="form-subtitle">Join us today</p>
+
+              <div class="input-row">
+                <div class="input-group">
+                  <i class="fas fa-user input-icon"></i>
+                  <input type="text" id="rfname" placeholder="First Name" />
+                </div>
+                <div class="input-group">
+                  <i class="fas fa-user input-icon"></i>
+                  <input type="text" id="rlname" placeholder="Last Name" />
+                </div>
+              </div>
+
+              <div class="input-group">
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="email" id="remail" placeholder="Email Address" />
+              </div>
+              <div class="input-group">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" id="rpass" placeholder="Password" />
+                <i
+                  class="fas fa-eye toggle-password"
+                  onclick="togglePassword('rpass', this)"
+                ></i>
+              </div>
+              <div class="input-group">
+                <i class="fas fa-lock input-icon"></i>
+                <input
+                  type="password"
+                  id="rpassConfirm"
+                  placeholder="Confirm Password"
+                />
+                <i
+                  class="fas fa-eye toggle-password"
+                  onclick="togglePassword('rpassConfirm', this)"
+                ></i>
+              </div>
+
+              <div class="checkbox-group">
+                <input type="checkbox" id="terms" />
+                <label for="terms"
+                  >I agree to the <a href="#">Terms & Conditions</a></label
+                >
+              </div>
+
+              <button onclick="register()" class="register-btn">
+                <span>Create Account</span>
+                <i class="fas fa-user-plus"></i>
+              </button>
+
+              <div class="divider">
+                <span>or</span>
+              </div>
+
+              <div class="social-login">
+                <button class="social-btn google">
+                  <i class="fab fa-google"></i>
+                </button>
+                <button class="social-btn apple">
+                  <i class="fab fa-apple"></i>
+                </button>
+                <button class="social-btn facebook">
+                  <i class="fab fa-facebook-f"></i>
+                </button>
+              </div>
+
+              <p class="switch-form">
+                Already have an account?
+                <span onclick="goLogin()">Login</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js.js"></script>
+  </body>
+</html>

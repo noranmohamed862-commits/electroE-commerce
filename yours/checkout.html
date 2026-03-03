@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ElectroSky | Checkout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              brand: "#3b82f6",
+              darkBg: "#0f172a",
+              cardDark: "#1e293b",
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+      .input-field {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        outline: none;
+        transition: all 0.3s;
+      }
+      .dark .input-field {
+        background: #334155;
+        border-color: #475569;
+        color: white;
+      }
+      .input-field:focus {
+        border: 2px solid #3b82f6;
+      }
+      .input-error {
+        border-color: #ef4444 !important;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gray-50 text-slate-800 dark:bg-darkBg dark:text-white transition-colors duration-300 min-h-screen"
+  >
+    <header class="bg-white dark:bg-cardDark shadow-sm py-4">
+      <div class="container mx-auto px-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-brand">Checkout</h1>
+        <!-- ✅ FIX: Back to Shop يروح index.html مش home.html -->
+        <a
+          href="home.html"
+          class="text-gray-500 hover:text-red-500 flex items-center gap-2 font-semibold"
+        >
+          <i class="fa-solid fa-arrow-left"></i> Back to Shop
+        </a>
+      </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-10">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left: Forms -->
+        <div class="lg:col-span-2 space-y-6">
+          <div
+            class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm shipping-section"
+          >
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-truck-fast text-brand"></i> Shipping Details
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                placeholder="First Name"
+                class="input-field"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Last Name"
+                class="input-field"
+                required
+              />
+              <input
+                type="email"
+                placeholder="Email Address"
+                class="input-field md:col-span-2"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Street Address"
+                class="input-field md:col-span-2"
+                required
+              />
+              <input
+                type="text"
+                placeholder="City"
+                class="input-field"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Zip Code"
+                class="input-field"
+                required
+              />
+            </div>
+          </div>
+
+          <div
+            class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-sm payment-section"
+          >
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+              <i class="fa-regular fa-credit-card text-brand"></i> Payment
+              Method
+            </h2>
+            <div class="flex gap-4 mb-6">
+              <button
+                class="flex-1 py-3 border-2 border-brand bg-blue-50 dark:bg-blue-900/20 text-brand font-bold rounded-lg flex items-center justify-center gap-2"
+              >
+                <i class="fa-brands fa-cc-visa text-2xl"></i> Credit Card
+              </button>
+              <button
+                class="flex-1 py-3 border border-gray-300 dark:border-gray-600 text-gray-500 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-100 dark:hover:bg-slate-800"
+              >
+                <i class="fa-brands fa-paypal text-2xl"></i> PayPal
+              </button>
+            </div>
+            <div class="space-y-4">
+              <div class="relative">
+                <input
+                  type="text"
+                  placeholder="Card Number"
+                  class="input-field pl-10"
+                />
+                <i
+                  class="fa-solid fa-credit-card absolute left-3 top-3.5 text-gray-400"
+                ></i>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <input type="text" placeholder="MM/YY" class="input-field" />
+                <input type="text" placeholder="CVC" class="input-field" />
+              </div>
+              <input
+                type="text"
+                placeholder="Cardholder Name"
+                class="input-field"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Order Summary -->
+        <div class="lg:col-span-1">
+          <div
+            class="bg-white dark:bg-cardDark p-6 rounded-2xl shadow-lg sticky top-6"
+          >
+            <h2 class="text-xl font-bold mb-4">Order Summary</h2>
+            <div
+              id="order-items"
+              class="space-y-3 max-h-60 overflow-y-auto mb-4 pr-2"
+            ></div>
+            <div
+              class="border-t dark:border-slate-700 pt-4 space-y-2 text-sm text-gray-600 dark:text-gray-400"
+            >
+              <div class="flex justify-between">
+                <span>Subtotal</span><span id="summary-subtotal">$0.00</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Tax (5%)</span><span id="summary-tax">$0.00</span>
+              </div>
+              <div class="flex justify-between text-green-500 font-bold">
+                <span>Shipping</span><span>Free</span>
+              </div>
+            </div>
+            <div
+              class="border-t border-dashed dark:border-slate-700 mt-4 pt-4 flex justify-between items-center text-xl font-bold"
+            >
+              <span>Total</span>
+              <span id="summary-total" class="text-brand">$0.00</span>
+            </div>
+            <button
+              onclick="handlePayment()"
+              class="w-full bg-brand hover:bg-blue-700 text-white py-4 rounded-xl font-bold mt-6 shadow-lg shadow-blue-500/30 transition-transform hover:scale-[1.02]"
+            >
+              Pay Now
+            </button>
+            <p class="text-xs text-center text-gray-400 mt-4">
+              <i class="fa-solid fa-lock"></i> Secure Encrypted Payment
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loader -->
+    <div
+      id="loader"
+      class="fixed inset-0 bg-black/80 z-50 hidden flex-col items-center justify-center text-white"
+    >
+      <div
+        class="w-16 h-16 border-4 border-brand border-t-transparent rounded-full animate-spin mb-4"
+      ></div>
+      <h3 class="text-xl font-bold">Processing...</h3>
+    </div>
+
+    <!-- Success Modal -->
+    <div
+      id="success-modal"
+      class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-white dark:bg-cardDark p-8 rounded-2xl text-center max-w-sm w-full"
+      >
+        <div
+          class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+        >
+          <i class="fa-solid fa-check text-4xl text-green-500"></i>
+        </div>
+        <h2 class="text-2xl font-bold mb-2">Payment Successful!</h2>
+        <p class="text-gray-500 mb-6">
+          Your order has been placed successfully.
+        </p>
+        <button
+          onclick="finishOrder()"
+          class="w-full bg-brand text-white py-3 rounded-lg font-bold"
+        >
+          Back to Home
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // ✅ FIX: لو جاي من Buy Now نعرض المنتج ده بس، لو جاي من Cart نعرض الكارت كله
+      const buyNowCart = JSON.parse(
+        localStorage.getItem("buyNowCart") || "null",
+      );
+      const regularCart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+      // لو في buyNowCart استخدمه، لو لأ استخدم الكارت العادي
+      const activeCart = buyNowCart ? buyNowCart : regularCart;
+
+      const itemsContainer = document.getElementById("order-items");
+
+      if (activeCart.length === 0) {
+        itemsContainer.innerHTML =
+          '<p class="text-red-500 text-center py-4">Cart is empty!</p>';
+      } else {
+        let subtotal = 0;
+        activeCart.forEach((item) => {
+          // ✅ FIX: بيحسب salePrice و quantity صح
+          const price = item.salePrice || item.price;
+          const quantity = item.quantity || 1;
+          const itemTotal = price * quantity;
+          subtotal += itemTotal;
+          itemsContainer.innerHTML += `
+                <div class="flex justify-between items-center text-sm">
+                    <div class="flex items-center gap-2">
+                        <img src="${item.img}" class="w-10 h-10 rounded object-contain bg-gray-100 dark:bg-slate-700">
+                        <span class="truncate w-32">${item.name} <span class="text-gray-400 text-xs">x${quantity}</span></span>
+                    </div>
+                    <span class="font-bold text-brand">$${itemTotal.toFixed(2)}</span>
+                </div>`;
+        });
+
+        const tax = subtotal * 0.05;
+        const total = subtotal + tax;
+        document.getElementById("summary-subtotal").innerText =
+          `$${subtotal.toFixed(2)}`;
+        document.getElementById("summary-tax").innerText = `$${tax.toFixed(2)}`;
+        document.getElementById("summary-total").innerText =
+          `$${total.toFixed(2)}`;
+      }
+
+      function handlePayment() {
+        if (activeCart.length === 0) return alert("Cart is empty!");
+        const allInputs = [
+          ...document.querySelectorAll(".shipping-section input"),
+          ...document.querySelectorAll(".payment-section input"),
+        ];
+        let allFilled = true;
+        allInputs.forEach((input) => {
+          if (!input.value.trim()) {
+            input.classList.add("input-error");
+            allFilled = false;
+          } else {
+            input.classList.remove("input-error");
+          }
+        });
+        if (!allFilled) return alert("⚠️ Please fill in all required fields!");
+        document.getElementById("loader").classList.remove("hidden");
+        document.getElementById("loader").classList.add("flex");
+        setTimeout(() => {
+          document.getElementById("loader").classList.add("hidden");
+          document.getElementById("loader").classList.remove("flex");
+          document.getElementById("success-modal").classList.remove("hidden");
+        }, 2500);
+      }
+
+      function finishOrder() {
+        localStorage.removeItem("cart");
+        localStorage.removeItem("buyNowCart");
+        window.location.href = "home.html";
+      }
+
+      if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
+  </body>
+</html>
